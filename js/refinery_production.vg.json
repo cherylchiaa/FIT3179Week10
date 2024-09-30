@@ -1,22 +1,67 @@
 {
     "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
     "title": "Refinery Production (2020-2024)",
-    "width": 800,
+    "width": 680,
     "height": 400,
     "data": {
         "url": "https://raw.githubusercontent.com/cherylchiaa/FIT3179Week10/refs/heads/main/data/RefineryProduction.csv"
     },
+    "params": [
+        {
+            "name": "FuelTypeSelection",
+            "value": "All", 
+            "bind": {
+                "input": "select", 
+                "options": ["All", "LPG (ML)", "Automotive gasoline (ML)", "Aviation turbine fuel (ML)", "Diesel oil (ML)", "Fuel oil (ML)", "Other products (ML)"],
+                "labels": ["Show All", "LPG", "Automotive Gasoline", "Aviation Turbine Fuel", "Diesel Oil", "Fuel Oil", "Other Products"]
+            }
+        }
+    ],
     "transform": [
         {
             "fold": ["LPG (ML)", "Automotive gasoline (ML)", "Aviation turbine fuel (ML)", "Diesel oil (ML)", "Fuel oil (ML)", "Other products (ML)"],
             "as": ["Fuel Type", "Amount (ML)"]
+        },
+        {
+            "window": [{"op": "max", "field": "Amount (ML)", "as": "Max Amount"}],
+            "groupby": ["Fuel Type"]
+        },
+        {
+            "filter": "FuelTypeSelection === 'All' || datum['Fuel Type'] === FuelTypeSelection"
         }
     ],
-    "mark": "point",
-    "encoding": {
-        "x": {"field": "Month", "type": "ordinal", "axis": {"labelAngle": -45}},
-        "y": {"field": "Amount (ML)", "type": "quantitative"},
-        "color": {"field": "Fuel Type", "type": "nominal"}
-    }
+    "layer": [
+        {
+            "mark": "point",
+            "encoding": {
+                "x": {"field": "Month", "type": "ordinal", "axis": {"labelAngle": -45}},
+                "y": {"field": "Amount (ML)", "type": "quantitative"},
+                "color": {"field": "Fuel Type", "type": "nominal"},
+                "tooltip": [
+                    {"field": "Month", "type": "ordinal", "title": "Month"},
+                    {"field": "Fuel Type", "type": "nominal", "title": "Fuel Type"},
+                    {"field": "Amount (ML)", "type": "quantitative", "title": "Amount (ML)", "format": ".2f"}
+                ]
+            }
+        },
+        {
+            "mark": {
+              "type": "text",
+              "align": "center",
+              "dx": 5,
+              "dy": -10,
+              "fontWeight": "bold",
+              "color": "red"
+            },
+            "encoding": {
+              "x": {"field": "Month", "type": "ordinal"},
+              "y": {"field": "Amount (ML)", "type": "quantitative"},
+              "text": {"field": "Amount (ML)", "type": "quantitative", "format": ".1f"}
+            },
+            "transform": [
+              {"filter": "datum['Amount (ML)'] === datum['Max Amount']"}
+            ]
+          }
+    ]
 }
   
