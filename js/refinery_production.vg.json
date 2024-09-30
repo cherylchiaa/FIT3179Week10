@@ -4,8 +4,7 @@
     "width": 800,
     "height": 400,
     "data": {
-        "url": "https://raw.githubusercontent.com/cherylchiaa/FIT3179Week10/main/data/RefineryProduction.json",
-        "format": {"type": "csv"}
+        "url": "https://raw.githubusercontent.com/cherylchiaa/FIT3179Week10/refs/heads/main/data/RefineryProduction.csv"
     },
     "transform": [
         {
