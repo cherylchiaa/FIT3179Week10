@@ -1,0 +1,23 @@
+{
+    "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+    "title": "Refinery Production (2020-2024)",
+    "width": 800,
+    "height": 400,
+    "data": {
+        "url": "https://raw.githubusercontent.com/cherylchiaa/FIT3179Week10/main/data/RefineryProduction.json",
+        "format": {"type": "csv"}
+    },
+    "transform": [
+        {
+            "fold": ["LPG (ML)", "Automotive gasoline (ML)", "Aviation turbine fuel (ML)", "Diesel oil (ML)", "Fuel oil (ML)", "Other products (ML)"],
+            "as": ["Fuel Type", "Amount (ML)"]
+        }
+    ],
+    "mark": "point",
+    "encoding": {
+        "x": {"field": "Month", "type": "ordinal", "axis": {"labelAngle": -45}},
+        "y": {"field": "Amount (ML)", "type": "quantitative"},
+        "color": {"field": "Fuel Type", "type": "nominal"}
+    }
+}
+  
